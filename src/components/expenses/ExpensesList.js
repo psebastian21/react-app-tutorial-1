@@ -9,12 +9,12 @@ function ExpensesList(props) {
     const handleFilterChange = event => {
         setYear(event.target.value)
     }
+    console.log(props.expenses.some(item => !(year === 'All' || item.date.getFullYear().toString() === year)))
 
     return (
         <Card className='expenses'>
             <ExpensesFilter selectedYear={year} handleFilterChange={handleFilterChange} />
-            {
-                props.expenses
+            {props.expenses.some(item => year === 'All' || item.date.getFullYear().toString() === year) ? props.expenses
                 .filter(item => year === 'All' || item.date.getFullYear().toString() === year)
                 .map((item) => {
                     return (
@@ -26,8 +26,7 @@ function ExpensesList(props) {
                         />
                     )
                 }
-                )
-            }
+                ) : <p>Items not found</p>}
         </Card>
     )
 }
