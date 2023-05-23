@@ -1,6 +1,7 @@
 import './ExpenseForm.css'
 
 import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 const ExpenseForm = (props) => {
     const today = getToday()
@@ -21,8 +22,9 @@ const ExpenseForm = (props) => {
     const submitHandler = event => {
         event.preventDefault()
         const expenseData = {
+            id: uuidv4(),
             title: enteredTitle,
-            amount: enteredAmount,
+            amount: parseFloat(enteredAmount),
             date: new Date(enteredDate)
         }
         props.onSaveExpenseDataHandler(expenseData)
