@@ -3,20 +3,23 @@ import ExpenseItem from "./ExpenseItem";
 import Card from '../misc/containers/Card';
 import { useState } from 'react';
 import ExpensesFilter from './ExpensesFilter';
+import ExpensesChart from './ExpensesChart';
 
 function ExpensesList(props) {
     const [year, setYear] = useState('All')
     const handleFilterChange = event => {
         setYear(event.target.value)
     }
-    console.log(props.expenses.some(item => !(year === 'All' || item.date.getFullYear().toString() === year)))
+
+    const filteredExpenses = props.expenses
+        .filter(item => year === 'All' || item.date.getFullYear().toString() === year)
 
     return (
         <Card className='expenses'>
             <ExpensesFilter selectedYear={year} handleFilterChange={handleFilterChange} />
-            {props.expenses.some(item => year === 'All' || item.date.getFullYear().toString() === year) ? props.expenses
-                .filter(item => year === 'All' || item.date.getFullYear().toString() === year)
-                .map((item) => {
+            <ExpensesChart expenses={filteredExpenses} />
+            {filteredExpenses.length > 0 ?
+                filteredExpenses.map((item) => {
                     return (
                         <ExpenseItem
                             key={item.id}
@@ -26,7 +29,7 @@ function ExpensesList(props) {
                         />
                     )
                 }
-                ) : <p>Items not found</p>}
+                ) : <p className='expenses-list__fallback'>Items not found</p>}
         </Card>
     )
 }
